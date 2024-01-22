@@ -1,35 +1,41 @@
 import cv2
+import pytesseract
 import numpy as np
+import os
+# Set the TESSDATA_PREFIX environment variable
+os.environ['TESSDATA_PREFIX'] = 'C:/Program Files/Tesseract-OCR/tessdata'
 
-# Charger l'image
-image = cv2.imread('test3.png')
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Load the image
+image = cv2.imread('test2.jpg', 0)
 
-# Appliquer un flou gaussien pour réduire le bruit
-blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+# Preprocess the image
+image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-# Détection de contours avec Canny
-edges = cv2.Canny(blurred, 50, 150)
+# Divide the image into 9 cells
+height, width = image.shape
+cell_height, cell_width = height // 3, width // 3
+cells = [ [ None for _ in range(3) ] for _ in range(3) ]
 
-# Appliquer la Transformée de Hough pour détecter les lignes
-lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 100, minLineLength=100, maxLineGap=100)
+for i in range(3):
+    for j in range(3):
+        cells[i][j] = image[i*cell_height:(i+1)*cell_height, j*cell_width:(j+1)*cell_width]
 
-# Dessiner les lignes détectées sur l'image originale
-if lines is not None:
-    for line in lines:
-        x1, y1, x2, y2 = line[0]
-        cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+# Recognize the character in each cell
+board = [ [ None for _ in range(3) ] for _ in range(3) ]
 
-# Afficher l'image avec les lignes détectées
-cv2.imshow('Lignes detectees', image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+for i in range(3):
+    for j in range(3):
+        cell = cells[i][j]
+        text = pytesseract.image_to_string(cell, config='--psm 10 --oem 3')
+        text = text.strip()
 
-# Découper chaque cellule de la grille
-cell_images = []
-for y in range(0, len(grid_lines)-1, 3):  # Choisir l'incrément en fonction de la taille de votre grille
-    for x in range(0, len(grid_lines[0])-1, 3):  # Choisir l'incrément en fonction de la taille de votre grille
-        cell = gray[y:y+grid_size, x:x+grid_size]
-        cell_images.append(cell)
+        if 'X' in text.upper() or 'x' in text.lower():
+            board[i][j] = 'X'
+        elif 'O' in text.upper() or 'o' in text.lower() or '0' in text:
+            board[i][j] = 'O'
+        else:
+            board[i][j] = ' '
 
-print(cell_images.__sizeof__())
+# Print the Tic Tac Toe board
+for row in board:
+    print(row)
