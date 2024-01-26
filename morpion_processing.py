@@ -49,27 +49,39 @@ def winner(board):
     for row in board:
         print(row)
 
-    cpt = 0
+    no_winner = 0
     # Check if there is a winner
     for i in range(3):
         if board[i][0] == board[i][1] == board[i][2] != ' ':
             print(f"\nThe winner is '{board[i][0]}'\n")
-            cpt += 1
+            no_winner += 1
             break
         if board[0][i] == board[1][i] == board[2][i] != ' ':
             print(f"\nThe winner is '{board[0][i]}'\n")
-            cpt += 1
+            no_winner += 1
             break
 
     if board[0][0] == board[1][1] == board[2][2] != ' ':
         print(f"\nThe winner is '{board[0][0]}'\n")
-        cpt += 1
+        no_winner += 1
     elif board[0][2] == board[1][1] == board[2][0] != ' ':
         print(f"\nThe winner is '{board[0][2]}'\n")
-        cpt += 1
-    elif(cpt == 0):
+        no_winner += 1
+    elif(no_winner == 0):
         print("\nNo winner\n")
 
+    # Check if there is still moves available
+    empty_cells = 0
+    if no_winner == 0:
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    empty_cells += 1
+
+        if empty_cells != 0:
+            print(f"There is still {empty_cells} moves available\n")
+
+# Test a specific image
 def full_process(img_path):
     cells = image_process(img_path)
     board = character_recognition(cells)
