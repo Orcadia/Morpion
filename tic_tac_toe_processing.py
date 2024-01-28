@@ -68,7 +68,7 @@ def winner(board):
         print(f"\nThe winner is '{board[0][2]}'\n")
         no_winner += 1
     elif(no_winner == 0):
-        print("\nNo winner\n")
+        print("\nNo winner")
 
     # Check if there is still moves available
     empty_cells = 0
@@ -94,7 +94,4 @@ def test_from_folder(folderName):
             print('filename: ' + filename)
             full_process(folderName + '/' + filename)
 
-
 test_from_folder('test')
-
-
