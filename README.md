@@ -1,17 +1,6 @@
 <h2 align="left">Tic Tac Toe image processing project</h2>
-
-###
-
 <h3 align="left">The goal of this project is to find out the state of a tic-tac-toe game.</h3>
-
-###
-
-<br clear="both">
-
 <p align="left">Here is the technologies we used to make this project:</p>
-
-###
-
 <div align="left">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="30" alt="python logo"  />
   <img width="12" />
