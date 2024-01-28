@@ -95,6 +95,6 @@ def test_from_folder(folderName):
             full_process(folderName + '/' + filename)
 
 
-full_process('test/test3.png')
+test_from_folder('test')
 
 
